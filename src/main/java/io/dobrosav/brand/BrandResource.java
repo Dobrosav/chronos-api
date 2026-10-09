@@ -2,6 +2,7 @@ package io.dobrosav.brand;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
@@ -45,10 +46,11 @@ public class BrandResource {
 
     @DELETE
     @Path("/{id}")
-    public void deleteBrand(@PathParam("id") long id) {
+    public Response deleteBrand(@PathParam("id") long id) {
         boolean deleted = brandService.deleteBrand(id);
         if (!deleted) {
-            throw new NotFoundException();
+            throw new NotFoundException("Brand with id " + id + " not found");
         }
+        return Response.noContent().build();
     }
 }
