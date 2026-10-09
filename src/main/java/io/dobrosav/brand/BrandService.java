@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 public class BrandService {
 
 
-    public List<BrandDto> getBrands() {
-        Log.info("Fetching all brands from database");
-        List<Brand> brands = Brand.listAll();
-        Log.infof("Found %d brands", brands.size());
+    public List<BrandDto> getBrands(int pageIndex, int pageSize) {
+        Log.infof("Fetching brands from database (page: %d, size: %d)", pageIndex, pageSize);
+        List<Brand> brands = Brand.findAll().page(pageIndex, pageSize).list();
+        Log.infof("Found %d brands on current page", brands.size());
         return brands.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
@@ -56,12 +56,12 @@ public class BrandService {
             Log.warnf("Update failed: Another brand with name '%s' already exists", brandDto.name());
             throw new ClientErrorException("Brand with name " + brandDto.name() + " already exists", Response.Status.CONFLICT);
         }
-        
+
         Log.infof("Updating brand %d values. Old name: '%s', New name: '%s'", id, brand.name, brandDto.name());
         brand.name = brandDto.name();
         brand.countryOfOrigin = brandDto.countryOfOrigin();
         brand.foundationYear = brandDto.foundationYear();
-        
+
         return mapToDto(brand);
     }
 
