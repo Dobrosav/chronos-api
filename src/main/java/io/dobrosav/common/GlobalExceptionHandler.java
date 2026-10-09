@@ -8,7 +8,8 @@ import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 public class GlobalExceptionHandler {
 
 
-    public record ErrorMessage(String errorMessage, String errorDescription) {}
+    public record ErrorMessage(String errorMessage, String errorDescription) {
+    }
 
     @ServerExceptionMapper
     public Response handleNotFound(NotFoundException ex) {
@@ -20,7 +21,7 @@ public class GlobalExceptionHandler {
 
     @ServerExceptionMapper
     public Response handleAllExceptions(Throwable ex) {
-        Log.errorf("Occurred unexpected error",ex);
+        Log.errorf("Occurred unexpected error", ex);
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(new ErrorMessage("Occurred unexpected error", ex.getMessage()))
                 .build();
