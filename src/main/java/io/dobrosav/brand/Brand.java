@@ -15,7 +15,8 @@ public class Brand extends PanacheEntity {
 
     public int foundationYear;
 
-    public Brand() {}
+    public Brand() {
+    }
 
     public Brand(String name, String countryOfOrigin, int foundationYear) {
         this.name = name;

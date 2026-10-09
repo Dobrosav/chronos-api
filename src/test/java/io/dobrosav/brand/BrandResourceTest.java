@@ -21,26 +21,26 @@ public class BrandResourceTest {
         BrandDto newBrand = new BrandDto(null, "Seiko", "Japan", 1881);
 
         given()
-          .contentType(ContentType.JSON)
-          .body(newBrand)
-        .when()
-          .post("/brands")
-        .then()
-          .statusCode(200) // Ukoliko tvoj resurs vraća 200 OK. Ako si stavio Response.status(201) stavi 201
-          .body("name", is("Seiko"))
-          .body("countryOfOrigin", is("Japan"))
-          .body("foundationYear", is(1881))
-          .body("id", notNullValue());
+                .contentType(ContentType.JSON)
+                .body(newBrand)
+                .when()
+                .post("/brands")
+                .then()
+                .statusCode(200) // Ukoliko tvoj resurs vraća 200 OK. Ako si stavio Response.status(201) stavi 201
+                .body("name", is("Seiko"))
+                .body("countryOfOrigin", is("Japan"))
+                .body("foundationYear", is(1881))
+                .body("id", notNullValue());
     }
 
     @Test
     @Order(2)
     public void testGetAllBrands() {
         given()
-          .when().get("/brands")
-        .then()
-          .statusCode(200)
-          .body("size()", is(1)); // Sada već imamo 1 kreiran brend iz prvog testa
+                .when().get("/brands")
+                .then()
+                .statusCode(200)
+                .body("size()", is(1)); // Sada već imamo 1 kreiran brend iz prvog testa
     }
 
     @Test
@@ -48,12 +48,12 @@ public class BrandResourceTest {
     public void testGetSingleBrand() {
         // ID prvog kreiranog elementa će verovatno biti 1
         given()
-          .pathParam("id", 1)
-        .when()
-          .get("/brands/{id}")
-        .then()
-          .statusCode(200)
-          .body("name", is("Seiko"));
+                .pathParam("id", 1)
+                .when()
+                .get("/brands/{id}")
+                .then()
+                .statusCode(200)
+                .body("name", is("Seiko"));
     }
 
     @Test
@@ -62,11 +62,11 @@ public class BrandResourceTest {
         BrandDto duplicate = new BrandDto(null, "Seiko", "Japan", 1881);
 
         given()
-          .contentType(ContentType.JSON)
-          .body(duplicate)
-        .when()
-          .post("/brands")
-        .then()
-          .statusCode(409);
+                .contentType(ContentType.JSON)
+                .body(duplicate)
+                .when()
+                .post("/brands")
+                .then()
+                .statusCode(409);
     }
 }

@@ -17,13 +17,15 @@ public class BrandResource {
     }
 
     @GET
-    public List<BrandDto> getBrands() {
-        return brandService.getBrands();
+    public List<BrandDto> getBrands(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("10") int size) {
+        return brandService.getBrands(page, size);
     }
 
     @GET
     @Path("/{id}")
-    public BrandDto  getBrand(@PathParam("id") long id) {
+    public BrandDto getBrand(@PathParam("id") long id) {
         return brandService.getBrandById(id);
     }
 
@@ -37,16 +39,16 @@ public class BrandResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public BrandDto updateBrand(@PathParam("id") long id, BrandDto brandDto) {
-      return brandService.updateBrand(id, brandDto);
+        return brandService.updateBrand(id, brandDto);
     }
 
 
     @DELETE
     @Path("/{id}")
     public void deleteBrand(@PathParam("id") long id) {
-        boolean deleted=brandService.deleteBrand(id);
-        if(!deleted){
-          throw new NotFoundException();
+        boolean deleted = brandService.deleteBrand(id);
+        if (!deleted) {
+            throw new NotFoundException();
         }
     }
 }
