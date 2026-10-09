@@ -55,4 +55,18 @@ public class BrandResourceTest {
           .statusCode(200)
           .body("name", is("Seiko"));
     }
+
+    @Test
+    @Order(4)
+    public void testCreateDuplicateBrandReturnsConflict() {
+        BrandDto duplicate = new BrandDto(null, "Seiko", "Japan", 1881);
+
+        given()
+          .contentType(ContentType.JSON)
+          .body(duplicate)
+        .when()
+          .post("/brands")
+        .then()
+          .statusCode(409);
+    }
 }

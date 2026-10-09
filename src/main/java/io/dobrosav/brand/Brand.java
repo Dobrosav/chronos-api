@@ -11,15 +11,15 @@ public class Brand extends PanacheEntity {
     @Column(nullable = false, unique = true)
     public String name;
 
-    public String countyOfOrigin;
+    public String countryOfOrigin;
 
     public int foundationYear;
 
     public Brand() {}
 
-    public Brand(String name, String countyOfOrigin, int foundationYear) {
+    public Brand(String name, String countryOfOrigin, int foundationYear) {
         this.name = name;
-        this.countyOfOrigin = countyOfOrigin;
+        this.countryOfOrigin = countryOfOrigin;
         this.foundationYear = foundationYear;
     }
 
@@ -27,7 +27,7 @@ public class Brand extends PanacheEntity {
     public String toString() {
         return "Brand{" +
                 "name='" + name + '\'' +
-                ", countyOfOrigin='" + countyOfOrigin + '\'' +
+                ", countryOfOrigin='" + countryOfOrigin + '\'' +
                 ", foundationYear=" + foundationYear +
                 '}';
     }
