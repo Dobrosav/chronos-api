@@ -17,4 +17,14 @@ public class WatchModel extends PanacheEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id", nullable = false)
     public Brand brand;
+
+    @Override
+    public String toString() {
+        return "WatchModel{" +
+                "referenceNumber='" + referenceNumber + '\'' +
+                ", movementType='" + movementType + '\'' +
+                ", braceletMaterial='" + braceletMaterial + '\'' +
+                ", brand=" + brand +
+                '}';
+    }
 }
