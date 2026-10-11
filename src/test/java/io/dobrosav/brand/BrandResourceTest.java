@@ -17,7 +17,6 @@ public class BrandResourceTest {
     @Test
     @Order(1)
     public void testCreateBrand() {
-        // Pošto je BrandDto sada record, kreiramo ga pomoću konstruktora
         BrandDto newBrand = new BrandDto(null, "Seiko", "Japan", 1881);
 
         given()
@@ -26,7 +25,7 @@ public class BrandResourceTest {
                 .when()
                 .post("/brands")
                 .then()
-                .statusCode(200) // Ukoliko tvoj resurs vraća 200 OK. Ako si stavio Response.status(201) stavi 201
+                .statusCode(200)
                 .body("name", is("Seiko"))
                 .body("countryOfOrigin", is("Japan"))
                 .body("foundationYear", is(1881))
@@ -40,13 +39,12 @@ public class BrandResourceTest {
                 .when().get("/brands")
                 .then()
                 .statusCode(200)
-                .body("size()", is(1)); // Sada već imamo 1 kreiran brend iz prvog testa
+                .body("size()", is(1));
     }
 
     @Test
     @Order(3)
     public void testGetSingleBrand() {
-        // ID prvog kreiranog elementa će verovatno biti 1
         given()
                 .pathParam("id", 1)
                 .when()

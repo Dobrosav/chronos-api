@@ -1,9 +1,10 @@
 package io.dobrosav.brand;
 
+import io.dobrosav.model.WatchModel;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "brands")
@@ -14,6 +15,9 @@ public class Brand extends PanacheEntity {
     public String countryOfOrigin;
 
     public int foundationYear;
+
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<WatchModel> models;
 
     public Brand() {
     }

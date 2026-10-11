@@ -1,6 +1,7 @@
 package io.dobrosav.common;
 
 import io.quarkus.logging.Log;
+import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
@@ -20,8 +21,18 @@ public class GlobalExceptionHandler {
     }
 
     @ServerExceptionMapper
+    public Response handleClientError(ClientErrorException ex) {
+        Log.warn(ex.getMessage());
+        int status = ex.getResponse().getStatus();
+        Response.Status known = Response.Status.fromStatusCode(status);
+        return Response.status(status)
+                .entity(new ErrorMessage(known != null ? known.name() : "CLIENT_ERROR", ex.getMessage()))
+                .build();
+    }
+
+    @ServerExceptionMapper
     public Response handleAllExceptions(Throwable ex) {
-        Log.errorf("Occurred unexpected error", ex);
+        Log.error("Unexpected error occurred", ex);
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(new ErrorMessage("Occurred unexpected error", ex.getMessage()))
                 .build();
