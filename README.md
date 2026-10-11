@@ -52,13 +52,7 @@ The application relies on a PostgreSQL database. The database is defined in `doc
    ```
    *Note:* Upon application startup, database schema updates are automatically applied via `quarkus.hibernate-orm.schema-management.strategy=update`.
 
-3. **Seed the database (Optional):**
-   In another terminal, run the SQL script to insert 15 popular brands:
-   ```bash
-   docker exec -i chronos-db psql -U postgres -d chronos < db/seed.sql
-   ```
-
-4. **Quarkus Dev UI:** Available at <http://localhost:8080/q/dev/>
+3. **Quarkus Dev UI:** Available at <http://localhost:8080/q/dev/>
 
 ## Testing
 
