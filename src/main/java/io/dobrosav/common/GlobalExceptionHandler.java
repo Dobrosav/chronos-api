@@ -1,6 +1,7 @@
 package io.dobrosav.common;
 
 import io.quarkus.logging.Log;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
@@ -9,6 +10,7 @@ import org.jboss.resteasy.reactive.server.ServerExceptionMapper;
 public class GlobalExceptionHandler {
 
 
+    @RegisterForReflection
     public record ErrorMessage(String errorMessage, String errorDescription) {
     }
 
