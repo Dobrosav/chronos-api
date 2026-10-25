@@ -37,14 +37,36 @@ src/main/java/io/dobrosav/
     └── GlobalExceptionHandler.java
 ```
 
+## Configuration (`.env`)
+
+Database credentials are not stored in the repository. They are read from a `.env` file in the project root, which is ignored by git.
+
+Create it from the template:
+```bash
+cp .env.example .env
+```
+
+| Variable | Description | Example |
+|---|---|---|
+| `POSTGRES_DB` | Database name | `chronos` |
+| `POSTGRES_USER` | Database user | `postgres` |
+| `POSTGRES_PASSWORD` | Database password | `change-me` |
+
+The same file is used by:
+- **Docker Compose**: loaded automatically and used for both `db` and `api` services. Compose fails fast if a variable is missing.
+- **Quarkus dev mode**: Quarkus automatically loads `.env` from the project root (see `application.properties`).
+
+> **Note:** Postgres sets the password only on the first start with an empty volume. If you change `POSTGRES_PASSWORD` later, either recreate the volume (`docker compose down -v`, **deletes data**) or change it in the database with `ALTER USER`.
+
 ## Running the Application (Dev Mode)
 
 The application relies on a PostgreSQL database. The database is defined in `docker-compose.yml`.
 
-1. **Start the database:**
+1. **Start only the database:**
    ```bash
-   docker compose up -d
+   docker compose up -d db
    ```
+   *(Starting only `db` matters, because the `api` container would otherwise occupy port 8080.)*
 
 2. **Start Quarkus in dev mode:**
    ```bash
@@ -53,6 +75,23 @@ The application relies on a PostgreSQL database. The database is defined in `doc
    *Note:* Upon application startup, database schema updates are automatically applied via `quarkus.hibernate-orm.schema-management.strategy=update`.
 
 3. **Quarkus Dev UI:** Available at <http://localhost:8080/q/dev/>
+
+## Running with Docker (Native Image)
+
+The whole stack (database + API) can be started with Docker Compose. The `Dockerfile` is a multi-stage build:
+
+- **Build stage:** `ubi9-quarkus-mandrel-builder-image:jdk-25` compiles the application into a native executable (Quarkus 3.40 requires Mandrel 25).
+- **Runtime stage:** `ubi9-quarkus-micro-image:2.0`, a minimal UBI9 image. It must be UBI9 to match the glibc version of the builder.
+
+```bash
+docker compose up -d --build   # build and start
+docker compose logs -f api     # follow API logs
+docker compose down            # stop (data is kept in the postgres_data volume)
+```
+
+The API is available at <http://localhost:8080>.
+
+> **Note:** The native build takes a few minutes and needs a lot of memory (~6 GB peak). On WSL2, make sure enough memory is assigned in `.wslconfig`. Classes that are serialized to JSON but not returned directly from resource methods (e.g. the error DTO in exception mappers) must be annotated with `@RegisterForReflection`.
 
 ## Testing
 
